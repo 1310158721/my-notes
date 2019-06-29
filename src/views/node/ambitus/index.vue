@@ -1,5 +1,5 @@
 <template>
-  <a-button type="primary" @click="click">Home</a-button>
+  <a-button type="primary" @click="click">Ambitus</a-button>
 </template>
 
 <script lang="ts">
@@ -8,9 +8,9 @@ import { Route } from 'vue-router';
 
 @Component
 
-export default class Home extends Vue {
+export default class Ambitus extends Vue {
   public click() {
-    this.$router.push('/login')
+    console.log('Ambitus')
   }
 }
 </script>

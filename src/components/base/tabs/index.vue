@@ -7,7 +7,7 @@
       type="editable-card"
       @edit="onEdit"
       @tabClick="tabClick"
-      style="height: 40px; overflow: hidden; width: 500px;"
+      style="height: 40px; overflow: hidden; width: 100%;"
     >
       <a-tab-pane
         v-for="pane in panes"
@@ -26,30 +26,31 @@ import { Route } from 'vue-router'
 
 @Component
 export default class Tabs extends Vue {
-  public panes: any = []
+  public panes: string[] = []
   public activeKey: any = null
 
   public onEdit(targetKey: any, action: any) {
     if (this.panes.length > 1) {
-      this.panes = this.panes.filter((item: any, index: number) => {
+      this.panes = this.panes.filter((item: any, index: number, array: any) => {
         /**
          * 判断当前删除项是否为当前的选中项，不是的话，则做直接的过滤操作
          */
-        if (this.activeKey === targetKey) {
+        if (item.key === targetKey) {
           /**
-           * 若删除的当前项是第一个，则当前选中项切换为第二个，否则向前推进一个
+           * 若删除的当前项是最后一个，则当前选中项切换为最后第二个，否则向后推一个
            */
-          if (index === 0) {
-            this.activeKey = this.panes[1].key
-            this.$router.push(this.panes[1].path)
-            setLocalStorage('navKey', JSON.stringify(this.panes[1].key))
+          if (index === array.length - 1) {
+            setLocalStorage('navSelectKey', array[array.length - 2].key)
+            setLocalStorage('navOpenKey', array[array.length - 2].navOpenKey)
+            this.activeKey = array[array.length - 2].key
+            this.$router.push(array[array.length - 2].path)
           } else {
-            this.activeKey = this.panes[index - 1].key
-            this.$router.push(this.panes[index - 1].path)
-            setLocalStorage(
-              'navKey',
-              JSON.stringify(this.panes[index - 1].key)
-            );
+            if (item.key === this.activeKey) {
+              setLocalStorage('navSelectKey', array[index + 1].key)
+              setLocalStorage('navOpenKey', array[index + 1].navOpenKey)
+              this.activeKey = array[index + 1].key
+              this.$router.push(array[index + 1].path)
+            }
           }
         }
 
@@ -59,15 +60,14 @@ export default class Tabs extends Vue {
     }
   }
 
-  public tabClick(pane: any) {
-    this.$router.push(`/${pane}`)
+  public tabClick(pane: string) {
+    this.$router.push(`${pane}`)
   }
 
   @Watch('$route')
   private routeChange(val: { path: string }) {
     const currentPath = val.path;
-    const tabs = JSON.parse(JSON.stringify(getLocalStorage('tabs')))
-    this.panes = JSON.parse(tabs);
+    this.panes = JSON.parse(getLocalStorage('tabs') + '');
     const allPaths = this.panes.map((pane: any) => {
       if (currentPath === pane.path) {
         this.activeKey = pane.key;

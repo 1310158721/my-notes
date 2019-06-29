@@ -2,11 +2,10 @@
   <a-layout id="components-layout">
     <a-layout-sider :trigger="null" collapsible v-model="collapsed">
       <div class="logo"/>
-      <the-menu :collapsed="collapsed" />
+      <the-menu  @switchCollapsed="switchCollapsed" :collapsed="collapsed" />
     </a-layout-sider>
     <a-layout>
-      
-      <the-header :collapsed="collapsed" @toggle="toggle" />
+      <the-header />
       <Tabs />
       <a-layout-content
         :style="{ padding: '24px', boxSizing: 'border-box' ,background: 'rgba(0,0,0,.5)', minHeight: '280px' }"
@@ -26,8 +25,10 @@ import { getLocalStorage } from '@/utils/localStorage'
 import { Route } from 'vue-router'
 import TheHeader from '@/components/base/header/index.vue'
 import TheMenu from '@/components/base/menu/index.vue'
+import { testPost, getMenuList } from '@/http/apis'
 
 @Component({
+  name: 'app',
   components: {
     Tabs,
     TheHeader,
@@ -38,8 +39,12 @@ import TheMenu from '@/components/base/menu/index.vue'
 export default class App extends Vue {
   public collapsed: boolean = false
 
-  public toggle() {
+  public switchCollapsed() {
     this.collapsed = !this.collapsed
+  }
+
+  public mounted() {
+    testPost({user: 'tang'})
   }
 
   @Watch('$route')
