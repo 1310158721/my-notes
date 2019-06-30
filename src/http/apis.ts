@@ -14,5 +14,4 @@ export async function getMenuList(params: MenuList = {}) {
 export async function testPost(params: MenuList = {}) {
     const url = 'testPost'
     const res = await httpPost(url, params)
-    console.log(res)
 }
