@@ -20,6 +20,17 @@ const testRouterConfigs = [
         path: '/test-other',
         navOpenKey: 'Test'
       }
+    },
+    {
+      path: '/test-form',
+      name: 'test-form',
+      component: () => import(/* webpackChunkName: "test" */ '@/views/test/form/index.vue'),
+      meta: {
+        title: 'Form表单测试',
+        key: 'test-form',
+        path: '/test-form',
+        navOpenKey: 'Test'
+      }
     }
 ]
 

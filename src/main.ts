@@ -2,6 +2,7 @@
  * 全局组件
  */
 import Vue from 'vue'
+import i18n from '@/vue-i18n'
 /**
  * 第三方组件
  */
@@ -22,6 +23,7 @@ Vue.use(Antd)
 
 new Vue({
   router,
+  i18n,
   store,
   render: (h) => h(App),
 }).$mount('#app')
